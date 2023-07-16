@@ -1,23 +1,28 @@
 # MusicStore-DataCleaning
 /* Senior most employee*/
+
 select first_name, last_name, levels from music_store.employee order by levels desc limit 1;
 
 
 /*Which countries have the most invoices*/
+
 select billing_country, count(*) from music_store.invoice group by billing_country order by count(*) desc limit 1;
 
 
 /*What are the top 3 of total invoices*/
+
 select billing_country, sum(total) as total from music_store.invoice group by billing_country order by total desc limit 3;
 
 
 /*Which city has the best customers. We would like to throw a promotional music festival in the city we made the most money. Write a query that 
 returns one city that has the highest sum of invoice totals. Return both the city name and sum of all the invoice totals*/
+
 select billing_city, sum(total) as total from music_store.invoice group by billing_city  order by total desc limit 1;
 
 
 /* Who is the best customer. The customer who has spent the most money will be declared the best customer. Write a query that returns
 the person who has spent the most money.*/
+
 select  music_store.customer.customer_id,music_store.customer.first_name, music_store.customer.last_name, sum(music_store.invoice.total) as total from music_store.customer 
 Join music_store.invoice 
 On music_store.customer.customer_id=music_store.invoice.customer_id
@@ -28,6 +33,7 @@ limit 1;
 
 /* Write a query to return email, first name , last name and genre of all rock music listeners. return your list oredered alphabatically by email 
 starting with a*/
+
 select distinct music_store.customer.first_name,music_store.customer.last_name,music_store.customer.email from music_store.customer
 join music_store.invoice 
 on music_store.customer.customer_id=music_store.invoice.customer_id
@@ -43,6 +49,7 @@ order by music_store.customer.email;
 
 /* Lets invite the artists who have written the most rock music in our dataset. Write a query name that returns the Artist name and total track
 count of the top 10 rock band*/
+
 select music_store.artist.artist_id,music_store.artist.name, count(music_store.artist.artist_id)  as number_of_songs from music_store.track 
 join music_store.album 
 on music_store.album.album_id=music_store.track.album_id
@@ -57,6 +64,7 @@ order by number_of_songs desc;
 
 /*Return all the track names that have a song length longer than the average song length. Return the name and
 milliseconds for each track. order by the song length with the longest songs listed first*/
+
 select music_store.track.name ,music_store.track.milliseconds from music_store.track
 where music_store.track.milliseconds > (
 select  avg(music_store.track.milliseconds) as avg_track_length from music_store.track) 
@@ -64,6 +72,7 @@ order by music_store.track.milliseconds desc ;
 
 
 /*Find how much amount spent by each customer on artists? Write a query to return customer name, artist name and total spent.*/
+
  WITH best_selling_artist AS (
 SELECT artist.artist_id AS artist_id, artist.name AS artist_name, SUM(invoice_line.unit_price*invoice_line.quantity) AS total_sales
 FROM invoice_line
